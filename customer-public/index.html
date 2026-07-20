@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Mèo — Không gian cà phê & mèo</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Café <span>Mèo</span> ☕🐾</div>
+    <nav>
+      <button class="tab-btn active" data-view="trangchu">Trang Chủ</button>
+      <button class="tab-btn" data-view="thucdon">Thực Đơn</button>
+      <button class="tab-btn" data-view="meocuatiem">Mèo Của Tiệm</button>
+      <button class="tab-btn" data-view="datban">Đặt Bàn</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- TRANG CHỦ -->
+  <section id="trangchu" class="view active">
+    <div class="hero">
+      <p class="hero-eyebrow">☕ Chào mừng đến với</p>
+      <h2>Café <em>Mèo</em> — Nơi cà phê<br>gặp gỡ tiếng mèo kêu</h2>
+      <p>Thư giãn trong không gian ấm cúng với những chú mèo dễ thương và ly cà phê thơm ngon do barista của chúng tôi pha chế.</p>
+      <button class="hero-btn" onclick="switchView('datban')">Đặt Bàn Ngay</button>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon">☕</div>
+        <h3>Cà Phê Thủ Công</h3>
+        <p>Mỗi ly được pha chế tỉ mỉ từ những hạt cà phê chọn lọc, mang hương vị đậm đà khó quên.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🐱</div>
+        <h3>Mèo Cưng Thân Thiện</h3>
+        <p>Những chú mèo được chăm sóc kỹ lưỡng, hiền lành và luôn sẵn sàng làm bạn cùng bạn.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📅</div>
+        <h3>Đặt Bàn Dễ Dàng</h3>
+        <p>Đặt trước để đảm bảo chỗ ngồi yêu thích — chỉ mất chưa đến 1 phút!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THỰC ĐƠN -->
+  <section id="thucdon" class="view">
+    <div class="section-header">
+      <p class="section-eyebrow">Thức uống & Đồ ăn</p>
+      <h2 class="section-title">Thực Đơn</h2>
+    </div>
+    <div id="menuContainer"></div>
+  </section>
+
+  <!-- MÈO CỦA TIỆM -->
+  <section id="meocuatiem" class="view">
+    <div class="section-header">
+      <p class="section-eyebrow">Những người bạn nhỏ</p>
+      <h2 class="section-title">Mèo Của Tiệm</h2>
+    </div>
+    <div id="catGrid" class="cat-grid"></div>
+  </section>
+
+  <!-- ĐẶT BÀN -->
+  <section id="datban" class="view">
+    <div class="section-header">
+      <p class="section-eyebrow">Giữ chỗ trước</p>
+      <h2 class="section-title">Đặt Bàn</h2>
+    </div>
+    <form class="form-wrap" id="datBanForm">
+      <label>Họ và Tên</label>
+      <input type="text" id="resName" placeholder="Nguyễn Văn A" required>
+
+      <label>Số Điện Thoại</label>
+      <input type="text" id="resPhone" placeholder="09xxxxxxxx" required>
+
+      <label>Email</label>
+      <input type="email" id="resEmail" placeholder="email@example.com">
+
+      <label>Số Bàn</label>
+      <input type="number" id="resTable" min="1" placeholder="Nhập số bàn" required>
+
+      <label>Ngày & Giờ Đến</label>
+      <input type="datetime-local" id="resDateTime" required>
+
+      <label>Số Người</label>
+      <input type="number" id="resGuests" min="1" value="2" required>
+
+      <button type="submit" class="submit-btn">Xác Nhận Đặt Bàn</button>
+      <div id="resMsg"></div>
+    </form>
+  </section>
+
+</main>
+
+<!-- GIỎ HÀNG -->
+<div class="cart-panel" id="cartPanel" style="display:none;">
+  <div class="cart-title">🛒 Đơn Hàng Của Bạn</div>
+  <div id="cartItems"></div>
+  <div class="cart-total">
+    <span>Tổng cộng</span>
+    <span id="cartTotal">0₫</span>
+  </div>
+  <button class="checkout-btn" id="checkoutBtn">Thanh Toán</button>
+  <div id="orderMsg" style="margin-top:10px;font-size:0.82rem;"></div>
+</div>
+
+<footer>© 2026 Café Mèo — Không gian cà phê & mèo dễ thương</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>

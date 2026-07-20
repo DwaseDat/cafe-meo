@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Josefin+Sans:wght@300;400;600&family=Lora:wght@400;600&display=swap');
+
+:root {
+  --kraft:     #E8DCC8;
+  --ink:       #2C1F0E;
+  --ink-light: #5A3E28;
+  --rust:      #8B3A1A;
+  --gold:      #C4922A;
+  --cream:     #F5EFE0;
+  --sage:      #6B7C5A;
+  --divider:   #B8A882;
+  --sidebar:   #1E1408;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: 'Lora', serif; background: var(--kraft); color: var(--ink); }
+
+/* ── LOGIN ── */
+.login-wrap {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--ink), #4A2E14);
+}
+.login-box {
+  background: var(--cream);
+  padding: 44px;
+  width: 340px;
+  border-radius: 2px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+  text-align: center;
+}
+.login-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.login-logo span { color: var(--rust); font-style: italic; }
+.login-sub {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 28px;
+}
+.login-box input {
+  display: block; width: 100%;
+  padding: 11px 14px; margin-top: 10px;
+  border: 1px solid var(--divider);
+  background: var(--kraft);
+  border-radius: 2px;
+  font-family: 'Lora', serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+.login-box input:focus { outline: none; border-color: var(--rust); }
+.login-btn {
+  margin-top: 20px; width: 100%;
+  background: var(--rust); color: white;
+  border: none; padding: 12px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; border-radius: 2px;
+}
+.login-btn:hover { background: var(--ink); }
+.login-msg { margin-top: 10px; color: var(--rust); font-size: 0.85rem; }
+
+/* ── LAYOUT ── */
+.app-layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 230px; flex-shrink: 0;
+  background: var(--sidebar);
+  padding: 28px 0;
+}
+.sidebar-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  padding: 0 24px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-btn {
+  display: block; width: 100%;
+  text-align: left; background: none; border: none;
+  color: #A09080;
+  padding: 12px 24px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.nav-btn:hover { color: var(--cream); background: rgba(255,255,255,0.04); }
+.nav-btn.active { color: var(--gold); border-left-color: var(--gold); background: rgba(196,146,42,0.08); }
+.nav-logout { margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px; }
+.nav-logout .nav-btn { color: #885555; }
+
+.content { flex: 1; padding: 36px 40px; overflow-y: auto; }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--ink);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--divider);
+}
+
+/* ── PANEL VIEWS ── */
+.panel-view { display: none; }
+.panel-view.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+/* ── STAT CARDS ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--cream);
+  border: 1px solid var(--divider);
+  padding: 22px 20px;
+  border-radius: 2px;
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--rust);
+}
+.stat-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-top: 4px;
+}
+
+/* ── TABLES ── */
+table {
+  width: 100%; border-collapse: collapse;
+  background: var(--cream);
+  border: 1px solid var(--divider);
+  border-radius: 2px;
+}
+th {
+  background: var(--kraft-dark, #D4C4A0);
+  padding: 10px 14px;
+  text-align: left;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  border-bottom: 1px solid var(--divider);
+}
+td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #EDE3CC;
+  font-size: 0.9rem;
+}
+tr:hover td { background: #FDF8EE; }
+tr:last-child td { border-bottom: none; }
+
+/* ── INLINE FORM ── */
+.form-inline {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 20px;
+  background: var(--cream);
+  border: 1px solid var(--divider);
+  padding: 16px; border-radius: 2px;
+}
+.form-inline input, .form-inline select {
+  padding: 9px 12px;
+  border: 1px solid var(--divider);
+  background: var(--kraft);
+  border-radius: 2px;
+  font-family: 'Lora', serif;
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+.form-inline button {
+  background: var(--rust); color: white;
+  border: none; padding: 9px 18px;
+  border-radius: 2px; cursor: pointer;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;
+}
+.form-inline button:hover { background: var(--ink); }
+
+/* ── BADGES ── */
+.badge {
+  padding: 3px 10px; border-radius: 20px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem; letter-spacing: 0.5px; font-weight: 600;
+}
+.badge.pending   { background: #F5E2C0; color: #8A5A1A; }
+.badge.completed { background: #D8EFD8; color: #2C5A29; }
+.badge.confirmed { background: #D8EFD8; color: #2C5A29; }
+.badge.cancelled { background: #F5DADA; color: #8A2A2A; }
+
+.action-btn {
+  background: none; border: 1px solid var(--divider);
+  color: var(--ink-light); padding: 4px 12px;
+  border-radius: 2px; font-size: 0.78rem; cursor: pointer;
+  font-family: 'Josefin Sans', sans-serif;
+  transition: all 0.15s; margin-right: 4px;
+}
+.action-btn:hover { background: var(--rust); color: white; border-color: var(--rust); }
+
+/* Toast */
+.toast {
+  position: fixed; top: 20px; right: 20px; z-index: 9999;
+  padding: 12px 20px; border-radius: 4px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.85rem; font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

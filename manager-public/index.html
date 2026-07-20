@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Mèo — Cổng Quản Lý</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ĐĂNG NHẬP -->
+<div class="login-wrap" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Café <span>Mèo</span> 🐾</div>
+    <div class="login-sub">Cổng Dành Cho Nhân Viên</div>
+    <input type="text" id="username" placeholder="Tên đăng nhập" value="admin">
+    <input type="password" id="password" placeholder="Mật khẩu" value="admin123">
+    <button class="login-btn" id="loginBtn">Đăng Nhập</button>
+    <div class="login-msg" id="loginMsg"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="app-layout" id="dashboard" style="display:none;">
+  <aside class="sidebar">
+    <div class="sidebar-logo">☕ Café Mèo</div>
+    <button class="nav-btn active" data-panel="tongquan">📊 Tổng Quan</button>
+    <button class="nav-btn" data-panel="donhang">🛒 Đơn Hàng</button>
+    <button class="nav-btn" data-panel="thucdon">🍽️ Thực Đơn</button>
+    <button class="nav-btn" data-panel="meocuatiem">🐱 Mèo</button>
+    <button class="nav-btn" data-panel="datban">📅 Đặt Bàn</button>
+    <div class="nav-logout">
+      <button class="nav-btn" id="logoutBtn">🚪 Đăng Xuất</button>
+    </div>
+  </aside>
+
+  <div class="content">
+
+    <!-- TỔNG QUAN -->
+    <div class="panel-view active" id="tongquan">
+      <h2 class="section-title">Tổng Quan</h2>
+      <div class="stat-grid" id="statGrid"></div>
+    </div>
+
+    <!-- ĐƠN HÀNG -->
+    <div class="panel-view" id="donhang">
+      <h2 class="section-title">Quản Lý Đơn Hàng</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mã Đơn</th>
+            <th>Khách Hàng</th>
+            <th>Nhân Viên</th>
+            <th>Thời Gian</th>
+            <th>Tổng Tiền</th>
+            <th>Trạng Thái</th>
+            <th>Thao Tác</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+
+    <!-- THỰC ĐƠN -->
+    <div class="panel-view" id="thucdon">
+      <h2 class="section-title">Quản Lý Thực Đơn</h2>
+      <form class="form-inline" id="menuForm">
+        <input type="text" id="mName" placeholder="Tên món" required>
+        <input type="number" id="mPrice" placeholder="Giá (VNĐ)" required>
+        <input type="number" id="mStock" placeholder="Số lượng" required>
+        <select id="mCategory">
+          <option value="drink">Thức Uống</option>
+          <option value="food">Đồ Ăn</option>
+          <option value="coffee">Cà Phê</option>
+          <option value="tea">Trà</option>
+          <option value="smoothie">Sinh Tố</option>
+          <option value="juice">Nước Ép</option>
+        </select>
+        <button type="submit">+ Thêm Món</button>
+      </form>
+      <table>
+        <thead>
+          <tr><th>Tên Món</th><th>Loại</th><th>Giá</th><th>Số Lượng</th><th>Thao Tác</th></tr>
+        </thead>
+        <tbody id="menuBody"></tbody>
+      </table>
+    </div>
+
+    <!-- MÈO -->
+    <div class="panel-view" id="meocuatiem">
+      <h2 class="section-title">Quản Lý Mèo</h2>
+      <form class="form-inline" id="catForm">
+        <input type="text" id="cName" placeholder="Tên mèo" required>
+        <select id="cBreed"></select>
+        <input type="date" id="cDob" placeholder="Ngày sinh">
+        <input type="text" id="cCare" placeholder="Mức chăm sóc">
+        <button type="submit">+ Thêm Mèo</button>
+      </form>
+      <table>
+        <thead>
+          <tr><th>Tên</th><th>Giống</th><th>Giới Tính</th><th>Mức Chăm Sóc</th><th>Sức Khỏe</th></tr>
+        </thead>
+        <tbody id="catsBody"></tbody>
+      </table>
+    </div>
+
+    <!-- ĐẶT BÀN -->
+    <div class="panel-view" id="datban">
+      <h2 class="section-title">Quản Lý Đặt Bàn</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mã</th>
+            <th>Khách Hàng</th>
+            <th>Điện Thoại</th>
+            <th>Số Bàn</th>
+            <th>Ngày Giờ</th>
+            <th>Số Người</th>
+            <th>Trạng Thái</th>
+          </tr>
+        </thead>
+        <tbody id="reservationsBody"></tbody>
+      </table>
+    </div>
+
+    <!-- NHÂN VIÊN (ẩn trong sidebar, chỉ Manager thấy) -->
+    <div class="panel-view" id="nhanvien">
+      <h2 class="section-title">Quản Lý Nhân Viên</h2>
+      <form class="form-inline" id="staffForm">
+        <input type="text" id="sName" placeholder="Họ và tên" required>
+        <input type="text" id="sPhone" placeholder="Số điện thoại">
+        <input type="text" id="sRole" placeholder="Chức vụ">
+        <input type="text" id="sUsername" placeholder="Tên đăng nhập" required>
+        <input type="password" id="sPassword" placeholder="Mật khẩu" required>
+        <button type="submit">+ Thêm Nhân Viên</button>
+      </form>
+      <table>
+        <thead>
+          <tr><th>Họ Tên</th><th>Điện Thoại</th><th>Chức Vụ</th><th>Tên ĐN</th></tr>
+        </thead>
+        <tbody id="staffBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

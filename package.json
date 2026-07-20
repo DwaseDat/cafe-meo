@@ -1,0 +1,16 @@
+{
+  "name": "coffee-cat-shop",
+  "version": "1.0.0",
+  "description": "Coffee Cat Shop - customer and manager websites (SQL Server)",
+  "main": "customer-server.js",
+  "scripts": {
+    "customer": "node customer-server.js",
+    "manager": "node manager-server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mssql": "^11.0.1",
+    "socket.io": "^4.8.3"
+  }
+}
