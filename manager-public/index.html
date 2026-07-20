@@ -11,7 +11,7 @@
 <!-- ĐĂNG NHẬP -->
 <div class="login-wrap" id="loginScreen">
   <div class="login-box">
-    <div class="login-logo">Café <span>Mèo</span> 🐾</div>
+    <div class="login-logo">Café <span>Mèo</span></div>
     <div class="login-sub">Cổng Dành Cho Nhân Viên</div>
     <input type="text" id="username" placeholder="Tên đăng nhập" value="admin">
     <input type="password" id="password" placeholder="Mật khẩu" value="admin123">
@@ -23,7 +23,7 @@
 <!-- DASHBOARD -->
 <div class="app-layout" id="dashboard" style="display:none;">
   <aside class="sidebar">
-    <div class="sidebar-logo">☕ Café Mèo</div>
+    <div class="sidebar-logo">Café Mèo</div>
     <button class="nav-btn active" data-panel="tongquan">📊 Tổng Quan</button>
     <button class="nav-btn" data-panel="donhang">🛒 Đơn Hàng</button>
     <button class="nav-btn" data-panel="thucdon">🍽️ Thực Đơn</button>
@@ -69,12 +69,13 @@
         <input type="number" id="mPrice" placeholder="Giá (VNĐ)" required>
         <input type="number" id="mStock" placeholder="Số lượng" required>
         <select id="mCategory">
-          <option value="drink">Thức Uống</option>
-          <option value="food">Đồ Ăn</option>
           <option value="coffee">Cà Phê</option>
           <option value="tea">Trà</option>
-          <option value="smoothie">Sinh Tố</option>
+          <option value="tea_pot">Ấm Trà Nóng</option>
           <option value="juice">Nước Ép</option>
+          <option value="smoothie">Sinh Tố</option>
+          <option value="coldbrew">Cold Brew</option>
+          <option value="food">Đồ Ăn</option>
         </select>
         <button type="submit">+ Thêm Món</button>
       </form>

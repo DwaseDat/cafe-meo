@@ -136,7 +136,16 @@ async function hoanThanhDon(orderId) {
 async function loadMenu() {
   const res = await fetch(`${API}/menu`);
   const items = await res.json();
-  const catMap = { drink:'Thức Uống', food:'Đồ Ăn', coffee:'Cà Phê', tea:'Trà', smoothie:'Sinh Tố', juice:'Nước Ép' };
+  const catMap = {
+    drink: 'Khác',
+    food: 'Đồ Ăn',
+    coffee: 'Cà Phê',
+    tea: 'Trà',
+    tea_pot: 'Ấm Trà Nóng',
+    smoothie: 'Sinh Tố',
+    juice: 'Nước Ép',
+    coldbrew: 'Cold Brew'
+  };
   document.getElementById('menuBody').innerHTML = items.map(item => `
     <tr>
       <td>${item.name}</td>

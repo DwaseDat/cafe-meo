@@ -10,7 +10,7 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo">Café <span>Mèo</span> ☕🐾</div>
+    <div class="logo">Café <span>Mèo</span></div>
     <nav>
       <button class="tab-btn active" data-view="trangchu">Trang Chủ</button>
       <button class="tab-btn" data-view="thucdon">Thực Đơn</button>
@@ -25,7 +25,7 @@
   <!-- TRANG CHỦ -->
   <section id="trangchu" class="view active">
     <div class="hero">
-      <p class="hero-eyebrow">☕ Chào mừng đến với</p>
+      <p class="hero-eyebrow">Chào mừng đến với</p>
       <h2>Café <em>Mèo</em> — Nơi cà phê<br>gặp gỡ tiếng mèo kêu</h2>
       <p>Thư giãn trong không gian ấm cúng với những chú mèo dễ thương và ly cà phê thơm ngon do barista của chúng tôi pha chế.</p>
       <button class="hero-btn" onclick="switchView('datban')">Đặt Bàn Ngay</button>
@@ -33,17 +33,17 @@
 
     <div class="feature-grid">
       <div class="feature-card">
-        <div class="icon">☕</div>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3.5c-.6.7-.6 1.3 0 2s.6 1.3 0 2M12 3.5c-.6.7-.6 1.3 0 2s.6 1.3 0 2"/></svg></div>
         <h3>Cà Phê Thủ Công</h3>
         <p>Mỗi ly được pha chế tỉ mỉ từ những hạt cà phê chọn lọc, mang hương vị đậm đà khó quên.</p>
       </div>
       <div class="feature-card">
-        <div class="icon">🐱</div>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-2.5-8-5.6-8-10a4 4 0 0 1 7-2.6A4 4 0 0 1 18 11c0 4.4-4 7.5-8 10z"/><path d="M8 6l-1.5-2.5M16 6l1.5-2.5M9 9l-2-1M15 9l2-1"/></svg></div>
         <h3>Mèo Cưng Thân Thiện</h3>
         <p>Những chú mèo được chăm sóc kỹ lưỡng, hiền lành và luôn sẵn sàng làm bạn cùng bạn.</p>
       </div>
       <div class="feature-card">
-        <div class="icon">📅</div>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/><path d="M9 14l1.5 1.5L14 12"/></svg></div>
         <h3>Đặt Bàn Dễ Dàng</h3>
         <p>Đặt trước để đảm bảo chỗ ngồi yêu thích — chỉ mất chưa đến 1 phút!</p>
       </div>
@@ -56,7 +56,10 @@
       <p class="section-eyebrow">Thức uống & Đồ ăn</p>
       <h2 class="section-title">Thực Đơn</h2>
     </div>
-    <div id="menuContainer"></div>
+    <div class="menu-layout">
+      <aside class="menu-sidebar" id="menuSidebar"></aside>
+      <div class="menu-grid" id="menuContainer"></div>
+    </div>
   </section>
 
   <!-- MÈO CỦA TIỆM -->
@@ -102,7 +105,7 @@
 
 <!-- GIỎ HÀNG -->
 <div class="cart-panel" id="cartPanel" style="display:none;">
-  <div class="cart-title">🛒 Đơn Hàng Của Bạn</div>
+  <div class="cart-title">Đơn Hàng Của Bạn</div>
   <div id="cartItems"></div>
   <div class="cart-total">
     <span>Tổng cộng</span>
