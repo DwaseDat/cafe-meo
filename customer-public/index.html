@@ -71,12 +71,19 @@
     <div id="catGrid" class="cat-grid"></div>
   </section>
 
-  <!-- ĐẶT BÀN -->
+ <!-- ĐẶT BÀN -->
   <section id="datban" class="view">
     <div class="section-header">
       <p class="section-eyebrow">Giữ chỗ trước</p>
       <h2 class="section-title">Đặt Bàn</h2>
     </div>
+
+    <div class="section-header" style="margin-top:8px;">
+      <p class="section-eyebrow" style="margin-bottom:0;">Chọn ngày giờ trước để xem mèo nào đang rảnh</p>
+    </div>
+    <div id="catSelectGrid" class="cat-grid cat-grid-select"></div>
+    <input type="hidden" id="resCatId" value="">
+
     <form class="form-wrap" id="datBanForm">
       <label>Họ và Tên</label>
       <input type="text" id="resName" placeholder="Nguyễn Văn A" required>
@@ -100,7 +107,6 @@
       <div id="resMsg"></div>
     </form>
   </section>
-
 </main>
 
 <!-- GIỎ HÀNG -->

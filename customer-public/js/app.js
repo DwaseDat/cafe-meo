@@ -238,7 +238,8 @@ document.getElementById('datBanForm').addEventListener('submit', async (e) => {
       customer_id: customerId,
       table_number: document.getElementById('resTable').value,
       reservation_date_time: document.getElementById('resDateTime').value,
-      number_of_guests: document.getElementById('resGuests').value
+      number_of_guests: document.getElementById('resGuests').value,
+      cat_id: selectedCatId || null
     })
   });
   const resData = await resRes.json();
@@ -246,14 +247,66 @@ document.getElementById('datBanForm').addEventListener('submit', async (e) => {
   if (resRes.ok) {
     msg.innerHTML = `<div class="msg success">🎉 Đặt bàn thành công! Mã đặt bàn #${resData.reservation_id}. Bạn có thể vào tab Thực Đơn để đặt món trước!</div>`;
     e.target.reset();
+    selectedCatId = null;
+    document.getElementById('resCatId').value = '';
+    busyCatIds = [];
+    renderCatSelectGrid();
   } else {
-    msg.innerHTML = `<div class="msg error">❌ Đặt bàn thất bại, vui lòng thử lại!</div>`;
+    msg.innerHTML = `<div class="msg error">❌ ${resData.error || 'Đặt bàn thất bại, vui lòng thử lại!'}</div>`;
+  }});
+// ── Chọn mèo khi đặt bàn ──
+let allCats = [];
+let busyCatIds = [];
+let selectedCatId = null;
+
+async function loadCatsForBooking() {
+  const res = await fetch(`${API}/cats`);
+  allCats = await res.json();
+  renderCatSelectGrid();
+}
+
+function renderCatSelectGrid() {
+  const grid = document.getElementById('catSelectGrid');
+  if (!grid) return;
+  grid.innerHTML = allCats.map(cat => {
+    const isBusy = busyCatIds.includes(cat.cat_id);
+    const isSelected = selectedCatId === cat.cat_id;
+    return `
+      <div class="cat-card cat-select-card ${isSelected ? 'selected' : ''} ${isBusy ? 'busy' : ''}"
+           data-cat-id="${cat.cat_id}"
+           onclick="${isBusy ? '' : `chonMeo(${cat.cat_id})`}">
+        ${catAvatarSVG(cat.breed_name)}
+        <div class="cat-name">${cat.name}</div>
+        <span class="cat-badge">${cat.breed_name}</span>
+        <div class="cat-desc">${cat.temperament_description || ''}</div>
+        ${isBusy ? '<div class="cat-busy-tag">Đã được đặt trong khung giờ này</div>' : ''}
+      </div>`;
+  }).join('');
+}
+
+function chonMeo(catId) {
+  selectedCatId = (selectedCatId === catId) ? null : catId;
+  document.getElementById('resCatId').value = selectedCatId || '';
+  renderCatSelectGrid();
+}
+
+document.getElementById('resDateTime')?.addEventListener('change', async (e) => {
+  const val = e.target.value;
+  if (!val) { busyCatIds = []; renderCatSelectGrid(); return; }
+  const res = await fetch(`${API}/cats/availability?datetime=${encodeURIComponent(val)}`);
+  const data = await res.json();
+  busyCatIds = data.busyCatIds || [];
+  if (selectedCatId && busyCatIds.includes(selectedCatId)) {
+    selectedCatId = null;
+    document.getElementById('resCatId').value = '';
   }
+  renderCatSelectGrid();
 });
 
 // ── Khởi động ──
 loadMenu();
 loadCats();
+loadCatsForBooking();
 
 // Tự động cập nhật menu mỗi 30 giây
 setInterval(loadMenu, 30000);

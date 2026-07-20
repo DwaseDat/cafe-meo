@@ -79,7 +79,7 @@ function connectSocket() {
     loadReservations();
     loadOverview();
   });
-
+  socket.on('cats_updated', () => loadCatsAndBreeds());
   socket.on('order_updated', () => { loadOrders(); loadOverview(); });
   socket.on('menu_updated',  () => loadMenu());
   socket.on('reservation_updated', () => loadReservations());
@@ -114,6 +114,7 @@ async function loadOrders() {
     <tr>
       <td>#${o.order_id}</td>
       <td>${o.customer_name}</td>
+      <td>${o.item_list || '—'}</td>
       <td>${o.staff_name || '—'}</td>
       <td>${new Date(o.order_date_time).toLocaleString('vi-VN')}</td>
       <td>${Number(o.total_amount).toLocaleString('vi-VN')}₫</td>
@@ -199,38 +200,79 @@ async function loadCatsAndBreeds() {
   const [catsRes, breedsRes] = await Promise.all([fetch(`${API}/cats`), fetch(`${API}/breeds`)]);
   const cats = await catsRes.json();
   const breeds = await breedsRes.json();
+  window._breedsCache = breeds;
 
   document.getElementById('cBreed').innerHTML = breeds.map(b =>
     `<option value="${b.breed_id}">${b.name}</option>`
   ).join('');
 
+  const careOptions = ['Low', 'Medium', 'High'];
+
   document.getElementById('catsBody').innerHTML = cats.map(c => `
     <tr>
-      <td>${c.name}</td>
-      <td>${c.breed_name}</td>
-      <td>${c.gender || '—'}</td>
-      <td>${c.care_level || '—'}</td>
-      <td>${c.current_health_status || '—'}</td>
+      <td>
+        <input type="text" value="${c.name || ''}"
+          onchange="capNhatMeo(${c.cat_id}, 'name', this.value)"
+          style="width:110px;padding:4px;border:1px solid #B8A882;border-radius:2px;background:#F5EFE0;">
+      </td>
+      <td>
+        <select onchange="capNhatMeo(${c.cat_id}, 'breed_id', this.value)"
+          style="padding:4px;border:1px solid #B8A882;border-radius:2px;background:#F5EFE0;">
+          ${breeds.map(b => `<option value="${b.breed_id}" ${b.breed_id === c.breed_id ? 'selected' : ''}>${b.name}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <select onchange="capNhatMeo(${c.cat_id}, 'gender', this.value)"
+          style="padding:4px;border:1px solid #B8A882;border-radius:2px;background:#F5EFE0;">
+          <option value="Male" ${c.gender === 'Male' ? 'selected' : ''}>Đực</option>
+          <option value="Female" ${c.gender === 'Female' ? 'selected' : ''}>Cái</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="capNhatMeo(${c.cat_id}, 'care_level', this.value)"
+          style="padding:4px;border:1px solid #B8A882;border-radius:2px;background:#F5EFE0;">
+          ${careOptions.map(o => `<option value="${o}" ${c.care_level === o ? 'selected' : ''}>${o}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <input type="text" value="${c.current_health_status || ''}"
+          onchange="capNhatMeo(${c.cat_id}, 'current_health_status', this.value)"
+          style="width:110px;padding:4px;border:1px solid #B8A882;border-radius:2px;background:#F5EFE0;">
+      </td>
+      <td>
+        <span id="meoSaved-${c.cat_id}" style="font-size:0.75rem;color:#2C5A29;"></span>
+      </td>
     </tr>
   `).join('');
 }
 
-document.getElementById('catForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  await fetch(`${API}/cats`, {
-    method: 'POST',
+async function capNhatMeo(catId, field, value) {
+  const res = await fetch(`${API}/cats`);
+  const cats = await res.json();
+  const cat = cats.find(c => c.cat_id === catId);
+  if (!cat) return;
+
+  const payload = {
+    breed_id: cat.breed_id,
+    name: cat.name,
+    date_of_birth: cat.date_of_birth ? cat.date_of_birth.split('T')[0] : null,
+    care_level: cat.care_level,
+    current_health_status: cat.current_health_status,
+    dietary_restriction: cat.dietary_restriction,
+    gender: cat.gender,
+    [field]: field === 'breed_id' ? Number(value) : value
+  };
+
+  await fetch(`${API}/cats/${catId}`, {
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name: document.getElementById('cName').value,
-      breed_id: document.getElementById('cBreed').value,
-      date_of_birth: document.getElementById('cDob').value || null,
-      care_level: document.getElementById('cCare').value,
-      current_health_status: 'Khỏe mạnh',
-      dietary_restriction: 'Không có'
-    })
+    body: JSON.stringify(payload)
   });
-  e.target.reset(); loadCatsAndBreeds();
-});
+
+  const tag = document.getElementById(`meoSaved-${catId}`);
+  if (tag) { tag.textContent = '✔ Đã lưu'; setTimeout(() => tag.textContent = '', 2000); }
+  loadCatsAndBreeds();
+}
 
 // ── Đặt bàn ──
 async function loadReservations() {

@@ -484,6 +484,18 @@ main { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
 }
 .checkout-btn:hover { background: var(--gold); color: var(--ink); }
 
+.cat-grid-select { margin-bottom: 28px; }
+.cat-select-card { cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s; }
+.cat-select-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(44,31,14,0.14); }
+.cat-select-card.selected { border-color: var(--rust); box-shadow: 0 0 0 2px var(--rust) inset; }
+.cat-select-card.busy { opacity: 0.45; cursor: not-allowed; }
+.cat-select-card.busy:hover { transform: none; box-shadow: none; }
+.cat-busy-tag {
+  margin-top: 8px; font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem; letter-spacing: .5px; text-transform: uppercase;
+  color: var(--rust); font-weight: 600;
+}
+
 /* ── FOOTER ── */
 footer {
   text-align: center;

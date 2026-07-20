@@ -31,15 +31,19 @@ router.get('/stats', async (req, res) => {
   });
 });
 
-// All orders
+// All orders — kèm danh sách tên món để nhân viên biết đã đặt gì
 router.get('/orders', async (req, res) => {
   const pool = await poolPromise;
   const result = await pool.request().query(`
     SELECT o.order_id, o.order_date_time, o.total_amount, o.status,
-           c.name AS customer_name, s.name AS staff_name
+           c.name AS customer_name, s.name AS staff_name,
+           STRING_AGG(CONCAT(m.name, N' x', oi.quantity), N', ') AS item_list
     FROM [order] o
     JOIN customer c ON o.customer_id = c.customer_id
     LEFT JOIN staff s ON o.staff_id = s.staff_id
+    LEFT JOIN order_item oi ON oi.order_id = o.order_id
+    LEFT JOIN menu m ON m.item_id = oi.item_id
+    GROUP BY o.order_id, o.order_date_time, o.total_amount, o.status, c.name, s.name
     ORDER BY o.order_date_time DESC
   `);
   res.json(result.recordset);
@@ -55,7 +59,6 @@ router.put('/orders/:id', async (req, res) => {
     .input('order_id', sql.Int, req.params.id)
     .query('UPDATE [order] SET staff_id = @staff_id, status = @status WHERE order_id = @order_id');
 
-  // 🔔 Thông báo real-time khi order hoàn thành
   const io = req.app.get('io');
   if (io) io.emit('order_updated', { order_id: req.params.id, status });
 
@@ -73,7 +76,7 @@ router.post('/menu', async (req, res) => {
   const { name, base_price, stock_quantity, category } = req.body;
   const pool = await poolPromise;
   const result = await pool.request()
-    .input('name', sql.VarChar, name)
+    .input('name', sql.NVarChar, name)
     .input('base_price', sql.Decimal(10, 2), base_price)
     .input('stock_quantity', sql.Int, stock_quantity)
     .input('category', sql.VarChar, category)
@@ -132,9 +135,9 @@ router.post('/staff', async (req, res) => {
   const { name, phone_number, role, username, password } = req.body;
   const pool = await poolPromise;
   const result = await pool.request()
-    .input('name', sql.VarChar, name)
+    .input('name', sql.NVarChar, name)
     .input('phone_number', sql.VarChar, phone_number)
-    .input('role', sql.VarChar, role)
+    .input('role', sql.NVarChar, role)
     .input('username', sql.VarChar, username)
     .input('password', sql.VarChar, password)
     .query(`INSERT INTO staff (name, phone_number, role, username, password)
@@ -154,19 +157,49 @@ router.get('/cats', async (req, res) => {
 });
 
 router.post('/cats', async (req, res) => {
-  const { breed_id, name, date_of_birth, care_level, current_health_status, dietary_restriction } = req.body;
+  const { breed_id, name, date_of_birth, care_level, current_health_status, dietary_restriction, gender } = req.body;
   const pool = await poolPromise;
   const result = await pool.request()
     .input('breed_id', sql.Int, breed_id)
-    .input('name', sql.VarChar, name)
+    .input('name', sql.NVarChar, name)
     .input('date_of_birth', sql.Date, date_of_birth || null)
-    .input('care_level', sql.VarChar, care_level)
-    .input('current_health_status', sql.VarChar, current_health_status)
-    .input('dietary_restriction', sql.VarChar, dietary_restriction)
-    .query(`INSERT INTO cat (breed_id, name, date_of_birth, care_level, current_health_status, dietary_restriction)
+    .input('care_level', sql.NVarChar, care_level)
+    .input('current_health_status', sql.NVarChar, current_health_status)
+    .input('dietary_restriction', sql.NVarChar, dietary_restriction)
+    .input('gender', sql.NVarChar, gender || null)
+    .query(`INSERT INTO cat (breed_id, name, date_of_birth, care_level, current_health_status, dietary_restriction, gender)
             OUTPUT INSERTED.cat_id
-            VALUES (@breed_id, @name, @date_of_birth, @care_level, @current_health_status, @dietary_restriction)`);
+            VALUES (@breed_id, @name, @date_of_birth, @care_level, @current_health_status, @dietary_restriction, @gender)`);
   res.json({ cat_id: result.recordset[0].cat_id });
+});
+
+// Cập nhật thông tin mèo (manager sửa từng trường)
+router.put('/cats/:id', async (req, res) => {
+  const { breed_id, name, date_of_birth, care_level, current_health_status, dietary_restriction, gender } = req.body;
+  const pool = await poolPromise;
+  await pool.request()
+    .input('id', sql.Int, req.params.id)
+    .input('breed_id', sql.Int, breed_id)
+    .input('name', sql.NVarChar, name)
+    .input('date_of_birth', sql.Date, date_of_birth || null)
+    .input('care_level', sql.NVarChar, care_level)
+    .input('current_health_status', sql.NVarChar, current_health_status)
+    .input('dietary_restriction', sql.NVarChar, dietary_restriction)
+    .input('gender', sql.NVarChar, gender)
+    .query(`UPDATE cat SET
+              breed_id = @breed_id,
+              name = @name,
+              date_of_birth = @date_of_birth,
+              care_level = @care_level,
+              current_health_status = @current_health_status,
+              dietary_restriction = @dietary_restriction,
+              gender = @gender
+            WHERE cat_id = @id`);
+
+  const io = req.app.get('io');
+  if (io) io.emit('cats_updated');
+
+  res.json({ success: true });
 });
 
 router.get('/breeds', async (req, res) => {
@@ -175,12 +208,14 @@ router.get('/breeds', async (req, res) => {
   res.json(result.recordset);
 });
 
-// Reservations
+// Reservations — kèm tên mèo được đặt (nếu có)
 router.get('/reservations', async (req, res) => {
   const pool = await poolPromise;
   const result = await pool.request().query(`
-    SELECT r.*, c.name AS customer_name, c.phone_number
-    FROM reservation r JOIN customer c ON r.customer_id = c.customer_id
+    SELECT r.*, c.name AS customer_name, c.phone_number, cat.name AS cat_name
+    FROM reservation r
+    JOIN customer c ON r.customer_id = c.customer_id
+    LEFT JOIN cat ON r.cat_id = cat.cat_id
     ORDER BY r.reservation_date_time DESC
   `);
   res.json(result.recordset);
