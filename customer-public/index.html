@@ -78,34 +78,42 @@
       <h2 class="section-title">Đặt Bàn</h2>
     </div>
 
-    <div class="section-header" style="margin-top:8px;">
-      <p class="section-eyebrow" style="margin-bottom:0;">Chọn ngày giờ trước để xem mèo nào đang rảnh</p>
+    <!-- Chia đôi: bên trái là form đặt bàn, bên phải là lưới mèo thu nhỏ để chọn -->
+    <div class="datban-layout">
+
+      <div class="datban-form-col">
+        <form class="form-wrap" id="datBanForm">
+          <label>Họ và Tên</label>
+          <input type="text" id="resName" placeholder="Nguyễn Văn A" required>
+
+          <label>Số Điện Thoại</label>
+          <input type="text" id="resPhone" placeholder="09xxxxxxxx" required>
+
+          <label>Email</label>
+          <input type="email" id="resEmail" placeholder="email@example.com">
+
+          <label>Số Bàn</label>
+          <input type="number" id="resTable" min="1" placeholder="Nhập số bàn" required>
+
+          <label>Ngày & Giờ Đến</label>
+          <input type="datetime-local" id="resDateTime" required>
+
+          <label>Số Người</label>
+          <input type="number" id="resGuests" min="1" value="2" required>
+
+          <input type="hidden" id="resCatId" value="">
+
+          <button type="submit" class="submit-btn">Xác Nhận Đặt Bàn</button>
+          <div id="resMsg"></div>
+        </form>
+      </div>
+
+      <div class="datban-catgrid-col">
+        <p class="section-eyebrow">Chọn ngày giờ trước để xem mèo nào đang rảnh</p>
+        <div id="catSelectGrid" class="cat-grid cat-grid-select cat-grid-compact"></div>
+      </div>
+
     </div>
-    <div id="catSelectGrid" class="cat-grid cat-grid-select"></div>
-    <input type="hidden" id="resCatId" value="">
-
-    <form class="form-wrap" id="datBanForm">
-      <label>Họ và Tên</label>
-      <input type="text" id="resName" placeholder="Nguyễn Văn A" required>
-
-      <label>Số Điện Thoại</label>
-      <input type="text" id="resPhone" placeholder="09xxxxxxxx" required>
-
-      <label>Email</label>
-      <input type="email" id="resEmail" placeholder="email@example.com">
-
-      <label>Số Bàn</label>
-      <input type="number" id="resTable" min="1" placeholder="Nhập số bàn" required>
-
-      <label>Ngày & Giờ Đến</label>
-      <input type="datetime-local" id="resDateTime" required>
-
-      <label>Số Người</label>
-      <input type="number" id="resGuests" min="1" value="2" required>
-
-      <button type="submit" class="submit-btn">Xác Nhận Đặt Bàn</button>
-      <div id="resMsg"></div>
-    </form>
   </section>
 </main>
 

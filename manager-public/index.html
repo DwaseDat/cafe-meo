@@ -91,6 +91,16 @@
     <!-- MÈO -->
     <div class="panel-view" id="meocuatiem">
       <h2 class="section-title">Quản Lý Mèo</h2>
+
+      <!-- Thêm giống mèo mới -->
+      <h3 style="font-family:'Josefin Sans',sans-serif;font-size:0.8rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink-light);margin-bottom:10px;">+ Thêm Giống Mèo Mới</h3>
+      <form class="form-inline" id="breedForm">
+        <input type="text" id="bName" placeholder="Tên giống mèo (VD: Ragdoll)" required>
+        <input type="text" id="bCountry" placeholder="Xuất xứ">
+        <input type="text" id="bTemperament" placeholder="Mô tả tính cách">
+        <button type="submit">+ Thêm Giống</button>
+      </form>
+
       <form class="form-inline" id="catForm">
         <input type="text" id="cName" placeholder="Tên mèo" required>
         <select id="cBreed"></select>

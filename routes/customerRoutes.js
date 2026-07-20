@@ -25,7 +25,7 @@ router.post('/customer', async (req, res) => {
   const { name, phone_number, email } = req.body;
   const pool = await poolPromise;
   const result = await pool.request()
-    .input('name', sql.VarChar, name)
+    .input('name', sql.NVarChar, name) // NVarChar để giữ đúng tên có dấu tiếng Việt
     .input('phone_number', sql.VarChar, phone_number)
     .input('email', sql.VarChar, email)
     .query(`INSERT INTO customer (name, phone_number, email)

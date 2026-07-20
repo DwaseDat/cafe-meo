@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap');
 
 :root {
   --kraft:     #E8DCC8;
@@ -10,6 +10,9 @@
   --cream:     #F5EFE0;
   --sage:      #6B7C5A;
   --divider:   #B8A882;
+  /* Font hiển thị tên món/tên mèo: hỗ trợ đầy đủ dấu tiếng Việt
+     (Playfair Display bị thiếu một số tổ hợp dấu như ạ, ỉ, ố, ứ) */
+  --viet-font: 'Be Vietnam Pro', 'Lora', sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -275,7 +278,9 @@ main { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
 
 .menu-card-body { padding: 14px 16px 16px; }
 .menu-card-name {
-  font-family: 'Playfair Display', serif;
+  /* Đổi từ 'Playfair Display' sang font hỗ trợ đầy đủ tiếng Việt
+     để tên món có dấu (ạ, ỉ, ố, ứ...) hiển thị đúng */
+  font-family: var(--viet-font);
   font-size: 1rem;
   font-weight: 700;
   color: var(--ink);
@@ -356,7 +361,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
   display: block;
 }
 .cat-name {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--viet-font);
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--ink);
@@ -484,7 +489,26 @@ main { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
 }
 .checkout-btn:hover { background: var(--gold); color: var(--ink); }
 
-.cat-grid-select { margin-bottom: 28px; }
+/* ══════════════════════════════════════════════════
+   ĐẶT BÀN — chia đôi: form bên trái, lưới mèo thu nhỏ bên phải
+   ══════════════════════════════════════════════════ */
+.datban-layout {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.datban-form-col {
+  flex: 1 1 420px;
+  min-width: 320px;
+}
+.datban-catgrid-col {
+  flex: 1 1 420px;
+  min-width: 300px;
+}
+.datban-catgrid-col .section-eyebrow { margin-bottom: 14px; }
+
+.cat-grid-select { margin-bottom: 0; }
 .cat-select-card { cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s; }
 .cat-select-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(44,31,14,0.14); }
 .cat-select-card.selected { border-color: var(--rust); box-shadow: 0 0 0 2px var(--rust) inset; }
@@ -494,6 +518,27 @@ main { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
   margin-top: 8px; font-family: 'Josefin Sans', sans-serif;
   font-size: 0.68rem; letter-spacing: .5px; text-transform: uppercase;
   color: var(--rust); font-weight: 600;
+}
+
+/* Lưới mèo thu nhỏ dùng riêng cho cột đặt bàn bên phải */
+.cat-grid-compact {
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  max-height: 560px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.cat-grid-compact .cat-card { padding: 12px 10px; }
+.cat-grid-compact .cat-avatar { width: 52px; height: 52px; margin-bottom: 6px; }
+.cat-grid-compact .cat-name { font-size: 0.88rem; margin-bottom: 4px; }
+.cat-grid-compact .cat-badge { font-size: 0.6rem; padding: 2px 8px; margin-bottom: 4px; }
+.cat-grid-compact .cat-desc { display: none; } /* ẩn mô tả dài để lưới gọn hơn */
+.cat-grid-compact .cat-busy-tag { font-size: 0.58rem; }
+
+@media (max-width: 900px) {
+  .datban-layout { flex-direction: column; }
+  .datban-catgrid-col { width: 100%; }
+  .cat-grid-compact { max-height: none; overflow-y: visible; }
 }
 
 /* ── FOOTER ── */

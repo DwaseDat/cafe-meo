@@ -274,6 +274,46 @@ async function capNhatMeo(catId, field, value) {
   loadCatsAndBreeds();
 }
 
+// ── Thêm mèo mới ──
+document.getElementById('catForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  await fetch(`${API}/cats`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: document.getElementById('cName').value,
+      breed_id: Number(document.getElementById('cBreed').value),
+      date_of_birth: document.getElementById('cDob').value || null,
+      care_level: document.getElementById('cCare').value
+    })
+  });
+  e.target.reset();
+  loadCatsAndBreeds();
+});
+
+// ── Thêm giống mèo mới ──
+document.getElementById('breedForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msgEl = document.getElementById('bName');
+  const res = await fetch(`${API}/breeds`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: document.getElementById('bName').value,
+      country_of_origin: document.getElementById('bCountry').value,
+      temperament_description: document.getElementById('bTemperament').value
+    })
+  });
+  if (res.ok) {
+    showToast('🐾 Đã thêm giống mèo mới!', '#D8EFD8', '#2C5A29');
+    e.target.reset();
+    loadCatsAndBreeds();
+  } else {
+    const data = await res.json().catch(() => ({}));
+    showToast(`❌ ${data.error || 'Không thể thêm giống mèo'}`, '#F5DADA', '#8A2A2A');
+  }
+});
+
 // ── Đặt bàn ──
 async function loadReservations() {
   const res = await fetch(`${API}/reservations`);

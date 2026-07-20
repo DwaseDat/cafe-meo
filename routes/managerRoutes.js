@@ -170,6 +170,10 @@ router.post('/cats', async (req, res) => {
     .query(`INSERT INTO cat (breed_id, name, date_of_birth, care_level, current_health_status, dietary_restriction, gender)
             OUTPUT INSERTED.cat_id
             VALUES (@breed_id, @name, @date_of_birth, @care_level, @current_health_status, @dietary_restriction, @gender)`);
+
+  const io = req.app.get('io');
+  if (io) io.emit('cats_updated');
+
   res.json({ cat_id: result.recordset[0].cat_id });
 });
 
@@ -206,6 +210,26 @@ router.get('/breeds', async (req, res) => {
   const pool = await poolPromise;
   const result = await pool.request().query('SELECT * FROM breed');
   res.json(result.recordset);
+});
+
+// Thêm giống mèo mới (manager tự thêm giống, không cần sửa SQL tay)
+router.post('/breeds', async (req, res) => {
+  const { name, country_of_origin, temperament_description } = req.body;
+  if (!name || !name.trim()) return res.status(400).json({ error: 'Tên giống mèo không được để trống' });
+
+  const pool = await poolPromise;
+  const result = await pool.request()
+    .input('name', sql.NVarChar, name)
+    .input('country_of_origin', sql.NVarChar, country_of_origin || null)
+    .input('temperament_description', sql.NVarChar, temperament_description || null)
+    .query(`INSERT INTO breed (name, country_of_origin, temperament_description)
+            OUTPUT INSERTED.breed_id
+            VALUES (@name, @country_of_origin, @temperament_description)`);
+
+  const io = req.app.get('io');
+  if (io) io.emit('cats_updated');
+
+  res.json({ breed_id: result.recordset[0].breed_id });
 });
 
 // Reservations — kèm tên mèo được đặt (nếu có)

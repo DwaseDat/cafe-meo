@@ -7,16 +7,16 @@ GO
 
 CREATE TABLE staff (
     staff_id INT IDENTITY(1,1) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name NVARCHAR(100) NOT NULL,
     phone_number VARCHAR(20),
-    role VARCHAR(50),
+    role NVARCHAR(50),
     username VARCHAR(50) UNIQUE,
     password VARCHAR(255)
 );
 
 CREATE TABLE customer (
     customer_id INT IDENTITY(1,1) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name NVARCHAR(100) NOT NULL,
     phone_number VARCHAR(20),
     email VARCHAR(100)
 );
@@ -40,10 +40,9 @@ CREATE TABLE [order] (
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
     FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );
-
 CREATE TABLE menu (
     item_id INT IDENTITY(1,1) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name NVARCHAR(100) NOT NULL,
     base_price DECIMAL(10,2),
     stock_quantity INT,
     category VARCHAR(50) DEFAULT 'drink',
@@ -62,46 +61,45 @@ CREATE TABLE order_item (
 
 CREATE TABLE breed (
     breed_id INT IDENTITY(1,1) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    country_of_origin VARCHAR(100),
-    temperament_description TEXT
+    name NVARCHAR(100) NOT NULL,
+    country_of_origin NVARCHAR(100),
+    temperament_description NVARCHAR(MAX)
 );
 
 CREATE TABLE cat (
     cat_id INT IDENTITY(1,1) PRIMARY KEY,
     breed_id INT NOT NULL,
-    name VARCHAR(100),
+    name NVARCHAR(100),
     date_of_birth DATE,
-    care_level VARCHAR(50),
-    current_health_status VARCHAR(100),
-    dietary_restriction VARCHAR(100),
+    care_level NVARCHAR(50),
+    current_health_status NVARCHAR(100),
+    dietary_restriction NVARCHAR(100),
     image_url VARCHAR(255),
     FOREIGN KEY (breed_id) REFERENCES breed(breed_id)
 
 );
 GO
 
--- Sample seed data
 INSERT INTO staff (name, phone_number, role, username, password) VALUES
-('Linh Nguyen', '0901234567', 'Manager', 'admin', 'admin123'),
-('Minh Tran', '0907654321', 'Barista', 'minh', 'minh123');
+(N'Linh Nguyen', '0901234567', N'Manager', 'admin', 'admin123'),
+(N'Minh Tran', '0907654321', N'Barista', 'minh', 'minh123');
 
 INSERT INTO menu (name, base_price, stock_quantity, category) VALUES
-('Cappuccino', 45000, 50, 'drink'),
-('Latte', 48000, 50, 'drink'),
-('Cold Brew', 50000, 40, 'drink'),
-('Cat Paw Cookie', 25000, 30, 'food'),
-('Cheesecake Slice', 55000, 20, 'food');
+(N'Cappuccino', 45000, 50, 'drink'),
+(N'Latte', 48000, 50, 'drink'),
+(N'Cold Brew', 50000, 40, 'drink'),
+(N'Cat Paw Cookie', 25000, 30, 'food'),
+(N'Cheesecake Slice', 55000, 20, 'food');
 
 INSERT INTO breed (name, country_of_origin, temperament_description) VALUES
-('British Shorthair', 'United Kingdom', 'Calm, easygoing, and affectionate'),
-('Ragdoll', 'United States', 'Gentle, relaxed, and very friendly'),
-('Scottish Fold', 'Scotland', 'Sweet-tempered and quiet');
+(N'British Shorthair', N'United Kingdom', N'Calm, easygoing, and affectionate'),
+(N'Ragdoll', N'United States', N'Gentle, relaxed, and very friendly'),
+(N'Scottish Fold', N'Scotland', N'Sweet-tempered and quiet');
 
 INSERT INTO cat (breed_id, name, date_of_birth, care_level, current_health_status, dietary_restriction) VALUES
-(1, 'Mochi', '2022-03-10', 'Low', 'Healthy', 'None'),
-(2, 'Coco', '2021-07-22', 'Medium', 'Healthy', 'Grain-free'),
-(3, 'Bean', '2023-01-15', 'Low', 'Healthy', 'None');
+(1, N'Mochi', '2022-03-10', N'Low', N'Healthy', N'None'),
+(2, N'Coco', '2021-07-22', N'Medium', N'Healthy', N'Grain-free'),
+(3, N'Bean', '2023-01-15', N'Low', N'Healthy', N'None');
 GO
 ----Thêm gender cho mèo
 USE coffee_cat_shop;
@@ -109,9 +107,9 @@ ALTER TABLE reservation ADD status VARCHAR(20) DEFAULT 'pending';
 GO
 ALTER TABLE cat ADD gender VARCHAR(10);
 GO
-UPDATE cat SET gender = 'Female' WHERE name = 'Mochi';
-UPDATE cat SET gender = 'Male' WHERE name = 'Coco';
-UPDATE cat SET gender = 'Male' WHERE name = 'Bean';
+UPDATE cat SET gender = 'Female' WHERE name = N'Mochi';
+UPDATE cat SET gender = 'Male' WHERE name = N'Coco';
+UPDATE cat SET gender = 'Male' WHERE name = N'Bean';
 GO
 
 -----Thêm Trigger
