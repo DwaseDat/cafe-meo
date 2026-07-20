@@ -15,19 +15,19 @@ router.post('/login', async (req, res) => {
   res.json(result.recordset[0]);
 });
 
-// Dashboard stats
+// Dashboard stats — gọi stored procedure sp_GetDashboardStats
+// (procedure tính: đơn hàng thành công, bàn đã xác nhận, doanh thu... xem dashboard_procedure.sql)
 router.get('/stats', async (req, res) => {
   const pool = await poolPromise;
-  const orderCount = await pool.request().query('SELECT COUNT(*) AS count FROM [order]');
-  const revenue = await pool.request().query('SELECT SUM(total_amount) AS total FROM [order]');
-  const catCount = await pool.request().query('SELECT COUNT(*) AS count FROM cat');
-  const reservationCount = await pool.request()
-    .query("SELECT COUNT(*) AS count FROM reservation WHERE reservation_date_time >= CAST(GETDATE() AS DATE)");
+  const result = await pool.request().execute('sp_GetDashboardStats');
+  const row = result.recordset[0];
   res.json({
-    orders: orderCount.recordset[0].count,
-    revenue: revenue.recordset[0].total || 0,
-    cats: catCount.recordset[0].count,
-    upcomingReservations: reservationCount.recordset[0].count
+    orders: row.completedOrders,                      // đơn hàng THÀNH CÔNG
+    revenue: row.totalRevenue,                         // doanh thu (chỉ tính đơn completed)
+    cats: row.totalCats,
+    upcomingReservations: row.upcomingReservations,
+    confirmedReservations: row.confirmedReservations,  // bàn đã xác nhận
+    totalOrders: row.totalOrders                       // tổng mọi đơn hàng (kể cả pending)
   });
 });
 
