@@ -1,8 +1,4 @@
--- dashboard_procedure.sql
--- Procedure tổng hợp số liệu cho phần "Tổng Quan" của Manager Dashboard
--- Gồm: tổng đơn hàng THÀNH CÔNG (status = 'completed'),
---      tổng bàn đặt đã XÁC NHẬN (status = 'confirmed'),
---      tổng doanh thu (chỉ tính từ đơn hàng completed)
+
 USE coffee_cat_shop;
 GO
 
@@ -34,4 +30,4 @@ END;
 GO
 
 -- Test thử procedure:
--- EXEC sp_GetDashboardStats;
+EXEC sp_GetDashboardStats;

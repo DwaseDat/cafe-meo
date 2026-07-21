@@ -101,6 +101,7 @@ async function loadOverview() {
   const res = await fetch(`${API}/stats`);
   const s = await res.json();
   document.getElementById('statGrid').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${s.totalOrders}</div><div class="stat-label">Tổng Đơn Hàng</div></div>
     <div class="stat-card"><div class="stat-num">${s.orders}</div><div class="stat-label">Đơn Hàng Thành Công</div></div>
     <div class="stat-card"><div class="stat-num">${Number(s.revenue).toLocaleString('vi-VN')}₫</div><div class="stat-label">Doanh Thu</div></div>
     <div class="stat-card"><div class="stat-num">${s.confirmedReservations}</div><div class="stat-label">Bàn Đã Xác Nhận</div></div>
