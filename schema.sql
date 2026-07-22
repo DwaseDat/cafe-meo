@@ -1,4 +1,4 @@
-
+-- Đây là file ban đầu 
 CREATE DATABASE coffee_cat_shop;
 GO
 
